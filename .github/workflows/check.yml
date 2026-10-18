@@ -38,3 +38,5 @@ jobs:
         run: python3 parallax/scripts/expressions.py --binary cerune/target/debug/cerune --corpus parallax/corpus/seeds.json --count 3 --depth 2 --budget 8 --out-dir parallax/.parallax-findings/expressions
       - name: Bounded control-flow campaign
         run: python3 parallax/scripts/control_flow.py --binary cerune/target/debug/cerune --corpus parallax/corpus/seeds.json --count 4 --depth 2 --budget 8 --out-dir parallax/.parallax-findings/flow
+      - name: Cerune-generated arithmetic inputs
+        run: python3 parallax/scripts/cerune_generator.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate.ceru
