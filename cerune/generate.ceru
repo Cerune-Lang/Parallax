@@ -1,0 +1,16 @@
+// Fixed-seed, bounded LCG: emit operand pairs and operator IDs.
+// Each line: left, operation (0=+,1=-,2=*,3=/), right.
+mut state: i64 = 1337;
+mut i: i64 = 0;
+while i < 12 {
+    state = (state * 48271) % 2147483647;
+    left: i32 = i32(state % 201 - 100);
+    state = (state * 48271) % 2147483647;
+    op: i64 = state % 4;
+    state = (state * 48271) % 2147483647;
+    right: i32 = i32(state % 201 - 100);
+    print(left);
+    print(op);
+    print(right);
+    i = i + 1;
+}
