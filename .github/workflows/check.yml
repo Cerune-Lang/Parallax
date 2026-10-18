@@ -15,21 +15,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Check out Parallax
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           path: parallax
-      - name: Check out Cerune
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: Cerune-Lang/Cerune
           ref: master
           path: cerune
           persist-credentials: false
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@1.98.0
-      - name: Build Cerune CLI
+      - uses: dtolnay/rust-toolchain@1.98.0
+      - name: Build Cerune
         working-directory: cerune
         run: cargo build --locked --bin cerune
+      - name: Test comparison oracle
+        run: python3 -m unittest discover -s parallax/tests -v
       - name: Compare execution routes
         run: python3 parallax/scripts/differential.py --binary cerune/target/debug/cerune --cases parallax/cases

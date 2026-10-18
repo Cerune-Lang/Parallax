@@ -1,0 +1,5 @@
+{
+  "kind": "failure",
+  "code": "integer-overflow",
+  "stdout": "before\n"
+}
