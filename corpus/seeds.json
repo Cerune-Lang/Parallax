@@ -1,0 +1,5 @@
+[
+  {"id": "smoke", "seed": 1337, "purpose": "small deterministic campaign"},
+  {"id": "boundaries", "seed": 12648430, "purpose": "integer boundary exploration"},
+  {"id": "repeatability", "seed": 20261018, "purpose": "stable third input stream"}
+]
