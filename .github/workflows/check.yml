@@ -32,3 +32,5 @@ jobs:
         run: python3 -m unittest discover -s parallax/tests -v
       - name: Compare execution routes
         run: python3 parallax/scripts/differential.py --binary cerune/target/debug/cerune --cases parallax/cases
+      - name: Deterministic arithmetic campaign
+        run: python3 parallax/scripts/seeded.py --binary cerune/target/debug/cerune --corpus parallax/corpus/seeds.json --count 4 --budget 8 --out-dir parallax/.parallax-findings
