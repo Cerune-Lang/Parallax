@@ -1,0 +1,35 @@
+name: Parallax differential checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  differential:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out Parallax
+        uses: actions/checkout@v4
+        with:
+          path: parallax
+      - name: Check out Cerune
+        uses: actions/checkout@v4
+        with:
+          repository: Cerune-Lang/Cerune
+          ref: master
+          path: cerune
+          persist-credentials: false
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@1.98.0
+      - name: Build Cerune CLI
+        working-directory: cerune
+        run: cargo build --locked --bin cerune
+      - name: Compare execution routes
+        run: python3 parallax/scripts/differential.py --binary cerune/target/debug/cerune --cases parallax/cases
