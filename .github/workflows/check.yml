@@ -34,3 +34,5 @@ jobs:
         run: python3 parallax/scripts/differential.py --binary cerune/target/debug/cerune --cases parallax/cases
       - name: Deterministic arithmetic campaign
         run: python3 parallax/scripts/seeded.py --binary cerune/target/debug/cerune --corpus parallax/corpus/seeds.json --count 4 --budget 8 --out-dir parallax/.parallax-findings
+      - name: Bounded expression-tree campaign
+        run: python3 parallax/scripts/expressions.py --binary cerune/target/debug/cerune --corpus parallax/corpus/seeds.json --count 3 --depth 2 --budget 8 --out-dir parallax/.parallax-findings/expressions
