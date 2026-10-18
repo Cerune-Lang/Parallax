@@ -1,0 +1,5 @@
+{
+  "kind": "failure",
+  "code": "division-by-zero",
+  "stdout": "before\n"
+}
