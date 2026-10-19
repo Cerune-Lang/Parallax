@@ -48,3 +48,5 @@ jobs:
         run: python3 parallax/scripts/cerune_loops.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate_loops.ceru
       - name: Cerune-generated array semantics
         run: python3 parallax/scripts/cerune_arrays.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate_arrays.ceru
+      - name: Cerune-generated function boundary semantics
+        run: python3 parallax/scripts/cerune_functions.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate_functions.ceru
