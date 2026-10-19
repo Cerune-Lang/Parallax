@@ -1,0 +1,44 @@
+// Parallax dogfooding: emit a versioned, bounded nested-arithmetic corpus.
+// Protocol v1: version, count, then (left, right, tail, inner-op, outer-op)
+// for each case, each field on its own decimal line. Ops: 0 +, 1 -, 2 *, 3 /.
+// No filesystem or child-process access is needed in Cerune.
+mut state: i64 = 20261019;
+mut i: i64 = 0;
+print(1);
+print(16);
+while i < 16 {
+    state = (state * 48271) % 2147483647;
+    mut left: i32 = i32(state % 201 - 100);
+    state = (state * 48271) % 2147483647;
+    mut right: i32 = i32(state % 201 - 100);
+    state = (state * 48271) % 2147483647;
+    mut tail: i32 = i32(state % 201 - 100);
+    state = (state * 48271) % 2147483647;
+    mut inner_op: i64 = state % 4;
+    state = (state * 48271) % 2147483647;
+    mut outer_op: i64 = state % 4;
+
+    // Deliberately guarantee checked-overflow and division-by-zero seeds.
+    if i % 4 == 0 {
+        left = 2147483647;
+        right = 1;
+        inner_op = 0;
+    } else {
+        if i % 4 == 1 {
+            left = 1;
+            right = 0;
+            inner_op = 3;
+        } else {
+            if i % 4 == 2 {
+                tail = 0;
+                outer_op = 3;
+            }
+        }
+    }
+    print(left);
+    print(right);
+    print(tail);
+    print(inner_op);
+    print(outer_op);
+    i = i + 1;
+}
