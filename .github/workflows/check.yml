@@ -44,3 +44,5 @@ jobs:
         run: python3 parallax/scripts/cerune_nested.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate_nested.ceru
       - name: Cerune-generated short-circuit cases
         run: python3 parallax/scripts/cerune_flow.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate_flow.ceru
+      - name: Cerune-generated stateful loops
+        run: python3 parallax/scripts/cerune_loops.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate_loops.ceru

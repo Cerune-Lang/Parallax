@@ -1,0 +1,58 @@
+// Parallax dogfooding: fixed-seed loop/state transition input corpus.
+// Protocol v1: version, case count; then per case:
+// mode (0:add, 1:multiply, 2:continue, 3:break, 4:alternate),
+// start:i32, step:i32, rounds:i64 (0..8), stop:i64 (1..9).
+// Generator has no file I/O, subprocess access or unbounded loops.
+mut state: i64 = 20261019;
+mut i: i64 = 0;
+print(1);
+print(30);
+while i < 30 {
+    state = (state * 48271) % 2147483647;
+    mut start: i32 = i32(state % 201 - 100);
+    state = (state * 48271) % 2147483647;
+    mut step: i32 = i32(state % 17 - 8);
+    state = (state * 48271) % 2147483647;
+    mut rounds: i64 = state % 9;
+    state = (state * 48271) % 2147483647;
+    mut stop: i64 = state % 9 + 1;
+    mode: i64 = i % 5;
+
+    // Fixed coverage for overflow, continue, break, and zero iterations.
+    if i == 0 {
+        start = 2147483647;
+        step = 1;
+        rounds = 1;
+    }
+    if i == 1 {
+        start = 1073741824;
+        step = 2;
+        rounds = 1;
+    }
+    if i == 2 {
+        start = 3;
+        step = 2;
+        rounds = 6;
+    }
+    if i == 3 {
+        start = 3;
+        step = 2;
+        rounds = 7;
+        stop = 2;
+    }
+    if i == 4 {
+        start = 2147483647;
+        step = 1;
+        rounds = 1;
+    }
+    if i == 5 {
+        rounds = 0;
+    }
+
+    print(mode);
+    print(start);
+    print(step);
+    print(rounds);
+    print(stop);
+    i = i + 1;
+}
