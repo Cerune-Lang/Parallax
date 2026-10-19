@@ -40,3 +40,5 @@ jobs:
         run: python3 parallax/scripts/control_flow.py --binary cerune/target/debug/cerune --corpus parallax/corpus/seeds.json --count 4 --depth 2 --budget 8 --out-dir parallax/.parallax-findings/flow
       - name: Cerune-generated arithmetic inputs
         run: python3 parallax/scripts/cerune_generator.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate.ceru
+      - name: Cerune-generated nested arithmetic
+        run: python3 parallax/scripts/cerune_nested.py --binary cerune/target/debug/cerune --generator parallax/cerune/generate_nested.ceru
