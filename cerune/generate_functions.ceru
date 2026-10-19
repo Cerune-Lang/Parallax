@@ -1,0 +1,41 @@
+// Parallax dogfooding: fixed-seed function-boundary and value-copy test corpus.
+// Protocol v1: version, case count, then seven fields per case:
+// array kind (0=fixed [i64;3], 1=dynamic [i64]), mode (0..5),
+// three elements, replacement, index.
+// All data is bounded. No file I/O or process spawning in Cerune.
+mut state: i64 = 20261019;
+mut i: i64 = 0;
+print(1);
+print(24);
+while i < 24 {
+    state = (state * 48271) % 2147483647;
+    first: i64 = state % 81 - 40;
+    state = (state * 48271) % 2147483647;
+    second: i64 = state % 81 - 40;
+    state = (state * 48271) % 2147483647;
+    third: i64 = state % 81 - 40;
+    state = (state * 48271) % 2147483647;
+    replacement: i64 = state % 101 + 100;
+    state = (state * 48271) % 2147483647;
+    mut index: i64 = state % 3;
+
+    kind: i64 = i / 12;
+    mode: i64 = i % 6;
+    // Two invalid indices for each representation. All other indices valid.
+    if mode == 3 {
+        if (i / 6) % 2 == 0 {
+            index = -1;
+        } else {
+            index = 3;
+        }
+    }
+
+    print(kind);
+    print(mode);
+    print(first);
+    print(second);
+    print(third);
+    print(replacement);
+    print(index);
+    i = i + 1;
+}
