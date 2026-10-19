@@ -1,0 +1,91 @@
+// Parallax dogfooding: generate nested short-circuit and branch-test inputs.
+// Protocol v1: version, count, then nine decimal fields per case:
+// outer op (0: &&, 1: ||), outer guard (0/1),
+// inner op (0: &&, 1: ||), inner guard (0/1),
+// comparison (0: ==, 1: !=, 2: <, 3: <=, 4: >, 5: >=),
+// arithmetic op (0: +, 1: -, 2: *, 3: /), a, b, target.
+// All arithmetic is bounded in i64 before conversion to i32.
+// The comparison's arithmetic is intentionally invalid in some cases.
+mut state: i64 = 20261019;
+mut i: i64 = 0;
+print(1);
+print(24);
+while i < 24 {
+    state = (state * 48271) % 2147483647;
+    mut a: i32 = i32(state % 41 - 20);
+    state = (state * 48271) % 2147483647;
+    mut b: i32 = i32(state % 41 - 20);
+    state = (state * 48271) % 2147483647;
+    target: i32 = i32(state % 41 - 20);
+    state = (state * 48271) % 2147483647;
+    cmp: i64 = state % 6;
+    state = (state * 48271) % 2147483647;
+    mut arithmetic: i64 = state % 4;
+
+    // Eight stable patterns ensure both skipped and evaluated RHS cases.
+    pattern: i64 = i % 8;
+    mut outer_op: i64 = 0;
+    mut outer_guard: i64 = 1;
+    mut inner_op: i64 = 0;
+    mut inner_guard: i64 = 1;
+
+    if pattern == 0 {
+        // false && rhs: outer short-circuits
+        outer_guard = 0;
+    }
+    if pattern == 1 {
+        // true || rhs: outer short-circuits
+        outer_op = 1;
+    }
+    if pattern == 2 {
+        // true && (false && bad): inner short-circuits
+        inner_guard = 0;
+    }
+    if pattern == 3 {
+        // false || (true || bad): inner short-circuits
+        outer_op = 1;
+        outer_guard = 0;
+        inner_op = 1;
+    }
+    if pattern == 4 {
+        // true && (true && bad): RHS must execute and trap
+    }
+    if pattern == 5 {
+        // false || (false || bad): RHS must execute and trap
+        outer_op = 1;
+        outer_guard = 0;
+        inner_op = 1;
+        inner_guard = 0;
+    }
+    if pattern == 6 {
+        // true && (true && good): normal comparison
+    }
+    if pattern == 7 {
+        // false || (false || good): normal comparison
+        outer_op = 1;
+        outer_guard = 0;
+        inner_op = 1;
+        inner_guard = 0;
+    }
+
+    if pattern < 6 {
+        a = 1;
+        b = 0;
+        arithmetic = 3;
+    } else {
+        if b == 0 {
+            b = 1;
+        }
+    }
+
+    print(outer_op);
+    print(outer_guard);
+    print(inner_op);
+    print(inner_guard);
+    print(cmp);
+    print(arithmetic);
+    print(a);
+    print(b);
+    print(target);
+    i = i + 1;
+}
