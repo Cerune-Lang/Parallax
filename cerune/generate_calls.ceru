@@ -1,0 +1,24 @@
+// Parallax: deterministic function-call cases for an independent Python oracle.
+// Protocol v1: version, count, then (mode, first i64, second i64).
+// 0 direct call; 1 nested; 2 argument order; 3 early value return;
+// 4 copied array; 5 string return; 6 early void return;
+// 7 evaluated argument traps after prior stdout.
+mut state: i64 = 20261024;
+mut i: i64 = 0;
+print(1);
+print(16);
+while i < 16 {
+    state = (state * 48271) % 2147483647;
+    a: i64 = state % 81 - 40;
+    state = (state * 48271) % 2147483647;
+    mut b: i64 = state % 81 - 40;
+    mode: i64 = i % 8;
+    if mode == 3 || mode == 6 {
+        // Both branches of each early return are explicitly exercised.
+        b = i / 8;
+    }
+    print(mode);
+    print(a);
+    print(b);
+    i = i + 1;
+}
