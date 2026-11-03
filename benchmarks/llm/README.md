@@ -22,14 +22,7 @@
 
 対象は算術、配列とfor、whileと整数除算の3ケース。**モデルに生成コードを実行させず、出力の整数を予測させます。** すべての正解・出題内容は公開されるため、これは評価手順を検証するパイロットです。モデル汚染への耐性、未知性の厳密な保証、統計的な有意差は主張しません。
 
-[Kaggle公式ドキュメント](https://www.kaggle.com/docs/benchmarks)と[公式Pythonライブラリ](https://github.com/Kaggle/kaggle-benchmarks)に従い、Kaggleのタスクエディタにスクリプトを貼るか、対応するKaggle CLIで次のように登録します（モデル推論の実行には利用者のKaggleアカウントが必要）。
-
-```sh
-kaggle benchmarks init
-kaggle benchmarks tasks push cerune-output-baseline-v1 -f benchmarks/llm/kaggle_task.py
-kaggle benchmarks tasks push cerune-output-spec-v1 -f benchmarks/llm/kaggle_task.py
-kaggle benchmarks tasks push cerune-output-examples-v1 -f benchmarks/llm/kaggle_task.py
-```
+[Kaggle公式ドキュメント](https://www.kaggle.com/docs/benchmarks)の手順で、[Create Task](https://www.kaggle.com/benchmarks/tasks/new) からタスクノートブックを開き、`kaggle_task.py` の内容を貼り付けて実行してください。`kaggle-benchmarks`はKaggleのタスク環境で利用できます。タスク公開とベンチマークへのグループ化はKaggleのWeb UIで行います。Kaggle CLIのサブコマンドについては未検証のためここには記載しません。
 
 KaggleタスクのブラウザUIで実行する場合、`cerune_output_baseline.run(llm=kbench.llm)`などを呼びます。利用可能なモデルはKaggle内の`list(kbench.llms.keys())`で確認してください。**このPRではKaggleにタスク登録・モデル実行はしていません。**
 
