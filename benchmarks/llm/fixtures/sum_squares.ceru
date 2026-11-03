@@ -1,0 +1,9 @@
+fn solve(x: i64) -> i64 {
+    mut total: i64 = 0;
+    mut index: i64 = 1;
+    while index <= x {
+        total = total + index * index;
+        index = index + 1;
+    }
+    return total;
+}
