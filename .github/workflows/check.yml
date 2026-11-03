@@ -30,6 +30,11 @@ jobs:
         run: cargo build --locked --bin cerune
       - name: Test comparison oracle
         run: python3 -m unittest discover -s parallax/tests -v
+      - name: Verify Cerune LLM benchmark pilot fixtures
+        run: |
+          python3 parallax/benchmarks/llm/codegen_eval.py --binary cerune/target/debug/cerune --task clamp --source parallax/benchmarks/llm/fixtures/clamp.ceru --allow-execution
+          python3 parallax/benchmarks/llm/codegen_eval.py --binary cerune/target/debug/cerune --task abs --source parallax/benchmarks/llm/fixtures/abs.ceru --allow-execution
+          python3 parallax/benchmarks/llm/codegen_eval.py --binary cerune/target/debug/cerune --task sum_squares --source parallax/benchmarks/llm/fixtures/sum_squares.ceru --allow-execution
       - name: Compare execution routes
         run: python3 parallax/scripts/differential.py --binary cerune/target/debug/cerune --cases parallax/cases
       - name: Deterministic arithmetic campaign
