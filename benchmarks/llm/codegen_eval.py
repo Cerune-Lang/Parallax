@@ -45,10 +45,10 @@ CASES = {
 }
 
 MAX_SOURCE_BYTES = 8192
-BLOCK = re.compile(r"^\\s*```(?:ceru|cerune)?\\s*\\n(.*?)\\n```\\s*$", re.DOTALL | re.IGNORECASE)
-FORBIDDEN = re.compile(r"\\b(import|print|main)\\b|\\b(?:std:)\\w+", re.IGNORECASE)
-REQUIRED = re.compile(r"\\bfn\\s+solve\\s*\\(\\s*x\\s*:\\s*i64\\s*\\)\\s*->\\s*i64\\s*\\{")
-FN = re.compile(r"\\bfn\\s+\\w+\\s*\\(")
+BLOCK = re.compile(r"^\s*```(?:ceru|cerune)?\s*\n(.*?)\n```\s*$", re.DOTALL | re.IGNORECASE)
+FORBIDDEN = re.compile(r"\b(import|print|main)\b|\b(?:std:)\w+", re.IGNORECASE)
+REQUIRED = re.compile(r"\bfn\s+solve\s*\(\s*x\s*:\s*i64\s*\)\s*->\s*i64\s*\{")
+FN = re.compile(r"\bfn\s+\w+\s*\(")
 
 
 def extract_source(text: str) -> str:
