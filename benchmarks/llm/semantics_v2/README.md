@@ -18,3 +18,7 @@ It calls each of six questions twice: one condition without a language reference
 Each `.ceru` test has a Parallax success or runtime-v1 diagnostic oracle, tested by Cerune `run`, `run-mir`, and `run-vm` in CI. These are six publicly visible questions, so do not infer generalization from this small sample. The variants also differ in prompt length. No generated code is executed in Kaggle. **The .run() calls use model quota.**
 
 The task definitions can be used in one notebook for experimentation; when publishing a single Kaggle Task, select the task intended for publication. If an existing Task shows Stale, it relates to its build snapshot rather than whether the console scores succeeded.
+
+## First user-run observations
+
+[Read the 2026-11-04 pilot result](../observations/2026-11-04-semantics-v2.md), including strict-vs-semantic scoring and the exact confirmed array-copy mistake.
