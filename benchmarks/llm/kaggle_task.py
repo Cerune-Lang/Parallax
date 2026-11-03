@@ -6,6 +6,9 @@ See README.md for study limitations (public cases, small N, no blinded holdout).
 """
 import kaggle_benchmarks as kbench
 
+# Avoid Jupyter Bokeh/Panel widgets failing to render on Kaggle mobile/browser.
+kbench.config.enable_console_mode(quiet=False, color=None)
+
 SPEC = """Cerune is a typed programming language.
 Variables: a: i64 = 7; / mut a: i64 = 7; (mutable variables may be reassigned).
 Statements end with ;. print(expr); prints a value followed by a newline.
