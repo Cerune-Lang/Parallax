@@ -42,7 +42,8 @@ def codegen_prompt(task, condition):
     return prompt + "Task: " + CODEGEN_REQUESTS[task] + "\n"
 
 
-def collect_code_generation(llm):
+@kbench.task(name="cerune-codegen-capture-v1")
+def collect_code_generation(llm) -> bool:
     records = []
     for condition in ("baseline", "spec"):
         for task in ("abs", "clamp", "sum_squares"):
@@ -57,16 +58,17 @@ def collect_code_generation(llm):
                 "prompt": codegen_prompt(task, condition),
             })
             print(f"CAPTURED {condition}/{task}: {len(raw)} characters (not graded)")
-    return records
+    out = Path("/kaggle/working/cerune_codegen_answers.json")
+    out.write_text(json.dumps({
+        "experiment": "cerune-codegen-v1",
+        "status": "captured-not-graded",
+        "model": "check console or notebook model selector",
+        "records": records,
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Saved {len(records)} model responses to {out}")
+    print("Collection completed; this task does not assess correctness.")
+    return True
 
 
-answers = collect_code_generation(kbench.llm)
-out = Path("/kaggle/working/cerune_codegen_answers.json")
-out.write_text(json.dumps({
-    "experiment": "cerune-codegen-v1",
-    "status": "captured-not-graded",
-    "model": "check console or notebook model selector",
-    "records": answers,
-}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-print(f"Saved {len(answers)} model responses to {out}")
-print("Do not treat collection as a correctness score; use the local isolated grader.")
+# .run() produces Kaggle's task run record; the JSON above holds raw answers.
+collect_code_generation.run(llm=kbench.llm)
