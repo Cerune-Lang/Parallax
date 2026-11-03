@@ -93,8 +93,7 @@ def cerune_output_examples(llm) -> float:
 
 
 # %%
-# Register actual runs in the Kaggle task notebook. Defining tasks alone does
-# not generate .run.json records required by Build Task.
-cerune_output_baseline.run(kbench.llm)
-cerune_output_spec.run(kbench.llm)
-cerune_output_examples.run(kbench.llm)
+# Build one Kaggle Task per notebook. Change the selected call and task name
+# in a separate notebook to build baseline and examples independently.
+# This notebook builds the specification condition.
+cerune_output_spec.run(llm=kbench.llm)
