@@ -1,0 +1,5 @@
+mut values: [i64] = array_copy([10, 20, 30]);
+saved: [i64] = values;
+values[1] = 99;
+print(saved[1]);
+print(values[1]);

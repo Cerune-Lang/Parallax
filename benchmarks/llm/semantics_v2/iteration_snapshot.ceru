@@ -1,0 +1,6 @@
+mut values: [i64; 3] = [1, 2, 3];
+for (item: i64 in values) {
+    print(item);
+    values[0] = 99;
+}
+print(values[0]);
