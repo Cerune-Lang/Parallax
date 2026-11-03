@@ -1,0 +1,6 @@
+fn source() -> i64 {
+    print(77);
+    return 9;
+}
+values: [i64] = array_repeat::<i64>(source(), 0);
+print(array_len(values));

@@ -35,6 +35,8 @@ jobs:
           python3 parallax/benchmarks/llm/codegen_eval.py --binary cerune/target/debug/cerune --task clamp --source parallax/benchmarks/llm/fixtures/clamp.ceru --allow-execution
           python3 parallax/benchmarks/llm/codegen_eval.py --binary cerune/target/debug/cerune --task abs --source parallax/benchmarks/llm/fixtures/abs.ceru --allow-execution
           python3 parallax/benchmarks/llm/codegen_eval.py --binary cerune/target/debug/cerune --task sum_squares --source parallax/benchmarks/llm/fixtures/sum_squares.ceru --allow-execution
+      - name: Validate six Cerune semantics benchmark v2 oracles
+        run: python3 parallax/scripts/differential.py --binary cerune/target/debug/cerune --cases parallax/benchmarks/llm/semantics_v2
       - name: Compare execution routes
         run: python3 parallax/scripts/differential.py --binary cerune/target/debug/cerune --cases parallax/cases
       - name: Deterministic arithmetic campaign

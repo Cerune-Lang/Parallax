@@ -1,0 +1,2 @@
+print(byte_len("日本語"));
+print(byte_len("e\u{301}"));
