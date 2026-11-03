@@ -50,17 +50,43 @@ def semantic_prompt(item, with_spec):
         + "Source:\n```ceru\n" + item["code"] + "\n```"
     )
 
+# Narrow, explicit format normalization: do not change actual printed values.
+CERUNE_KNOWN_ERROR_CODES = {
+    "integer-overflow", "division-by-zero", "division-overflow",
+    "array-index-out-of-bounds", "array-range-out-of-bounds",
+    "array-length-out-of-range", "allocation-limit-exceeded",
+    "allocation-size-overflow", "allocation-failed",
+}
+
+def cerune_normalize_error_code(response):
+    raw = str(response).strip()
+    parts = raw.split(":", 2)
+    if len(parts) != 3 or parts[0] != "ERROR":
+        return raw
+    canonical = parts[1].lower().replace("_", "-")
+    if canonical not in CERUNE_KNOWN_ERROR_CODES:
+        return raw
+    return "ERROR:" + canonical + ":" + parts[2]
+
+
 def semantic_score(llm, with_spec):
-    passed = 0
+    strict_passed = 0
+    semantic_passed = 0
     for index, item in enumerate(CERUNE_SEMANTIC_CASES):
         variant = "spec" if with_spec else "baseline"
         with kbench.chats.new(f"cerune-semantics-v2-{variant}-{index}"):
             response = llm.prompt(semantic_prompt(item, with_spec))
         actual = str(response).strip()
-        correct = actual == item["expected"]
-        passed += int(correct)
-        print(f"{item['id']}: {'PASS' if correct else 'FAIL'} | actual={actual!r} | expected={item['expected']!r}")
-    return passed / len(CERUNE_SEMANTIC_CASES)
+        strict_correct = actual == item["expected"]
+        semantic_correct = cerune_normalize_error_code(actual) == cerune_normalize_error_code(item["expected"])
+        strict_passed += int(strict_correct)
+        semantic_passed += int(semantic_correct)
+        print(f"{item['id']}: {'PASS' if strict_correct else 'FAIL'}"
+              f" | semantic={'PASS' if semantic_correct else 'FAIL'}"
+              f" | actual={actual!r} | expected={item['expected']!r}")
+    n = len(CERUNE_SEMANTIC_CASES)
+    print(f"STRICT: {strict_passed}/{n} | SEMANTIC: {semantic_passed}/{n}")
+    return strict_passed / n  # Kaggle RESULT remains strict for comparability.
 
 @kbench.task(name="cerune-semantics-baseline-v2")
 def cerune_semantics_baseline_v2(llm) -> float:
