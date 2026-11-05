@@ -1,0 +1,35 @@
+{
+  "experiment": "cerune-codegen-v1",
+  "records": [
+    {
+      "task": "abs",
+      "condition": "baseline",
+      "response": "fn solve(x: i64) -> i64 {\n    if x < 0 {\n        return -x;\n    }\n    return x;\n}"
+    },
+    {
+      "task": "clamp",
+      "condition": "baseline",
+      "response": "fn solve(x: i64) -> i64 {\n    if x < 0 {\n        return 0;\n    }\n    if x > 100 {\n        return 100;\n    }\n    return x;\n}"
+    },
+    {
+      "task": "sum_squares",
+      "condition": "baseline",
+      "response": "fn solve(x: i64) -> i64 {\n    if x <= 0 {\n        return 0;\n    }\n    return x * (x + 1) * (2 * x + 1) / 6;\n}"
+    },
+    {
+      "task": "abs",
+      "condition": "spec",
+      "response": "fn solve(x: i64) -> i64 {\n    if x < 0 {\n        return 0 - x;\n    } else {\n        return x;\n    }\n}"
+    },
+    {
+      "task": "clamp",
+      "condition": "spec",
+      "response": "fn solve(x: i64) -> i64 {\n    if x < 0 {\n        return 0;\n    } else {\n        if x > 100 {\n            return 100;\n        } else {\n            return x;\n        }\n    }\n}"
+    },
+    {
+      "task": "sum_squares",
+      "condition": "spec",
+      "response": "fn solve(x: i64) -> i64 {\n    if x <= 0 {\n        return 0;\n    }\n    mut total: i64 = 0;\n    for (mut i: i64 = 1; i <= x; i = i + 1) {\n        total = total + i * i;\n    }\n    return total;\n}"
+    }
+  ]
+}

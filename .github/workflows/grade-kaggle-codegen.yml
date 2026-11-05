@@ -1,0 +1,40 @@
+name: Grade Kaggle Cerune codegen
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  grade:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: parallax
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Cerune-Lang/Cerune
+          ref: ba4788fd7e15c4623621e4e6f96b8c3cc49f6670
+          path: cerune
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@1.98.0
+      - run: cargo build --locked --bin cerune
+        working-directory: cerune
+      - name: Isolated grader
+        run: |
+          mkdir -p results && chmod 777 results
+          docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --pids-limit 48 --memory 512m --cpus 1 --user 65534:65534 \
+            --tmpfs /tmp:rw,nosuid,nodev,size=128m,mode=1777 \
+            --mount "type=bind,source=$PWD/parallax,target=/opt/parallax,readonly" \
+            --mount "type=bind,source=$PWD/cerune/target/debug/cerune,target=/opt/cerune/cerune,readonly" \
+            --mount "type=bind,source=$PWD/results,target=/results" \
+            -w /tmp python:3.12-slim python /opt/parallax/benchmarks/llm/grade_captured_codegen.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cerune-codegen-scores
+          path: results/scores.json
+          if-no-files-found: warn
